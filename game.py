@@ -1,0 +1,267 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+from character import Warrior, Mage
+from enemy import Goblin, Orc
+import random
+
+class RPGGame:
+    def __init__(self):
+        self.window = tk.Tk()
+        self.window.title("Fantasy RPG Game")
+        self.window.geometry("600x400")
+        self.window.configure(bg='#2C3E50')
+        
+        self.player = None
+        self.current_enemy = None
+        self.stage = 0
+        self.setup_gui()
+
+    def setup_gui(self):
+        # Title
+        title_label = tk.Label(
+            self.window,
+            text="Fantasy RPG Game",
+            font=("Arial", 24, "bold"),
+            bg='#2C3E50',
+            fg='white'
+        )
+        title_label.pack(pady=20)
+
+        # Character Selection
+        self.char_var = tk.StringVar(value="Warrior")
+        char_frame = tk.Frame(self.window, bg='#2C3E50')
+        char_frame.pack(pady=10)
+
+        char_label = tk.Label(
+            char_frame,
+            text="Choose your character:",
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        )
+        char_label.pack()
+
+        warrior_rb = ttk.Radiobutton(
+            char_frame,
+            text="Warrior",
+            value="Warrior",
+            variable=self.char_var
+        )
+        warrior_rb.pack()
+
+        mage_rb = ttk.Radiobutton(
+            char_frame,
+            text="Mage",
+            value="Mage",
+            variable=self.char_var
+        )
+        mage_rb.pack()
+
+        # Name Entry
+        name_frame = tk.Frame(self.window, bg='#2C3E50')
+        name_frame.pack(pady=10)
+
+        name_label = tk.Label(
+            name_frame,
+            text="Enter your name:",
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        )
+        name_label.pack()
+
+        self.name_entry = tk.Entry(name_frame)
+        self.name_entry.pack()
+
+        # Start Button
+        start_button = tk.Button(
+            self.window,
+            text="Start Game",
+            command=self.start_game,
+            font=("Arial", 14),
+            bg='#27AE60',
+            fg='white',
+            padx=20,
+            pady=10
+        )
+        start_button.pack(pady=20)
+
+    def create_combat_gui(self):
+        self.window.geometry("800x600")
+        for widget in self.window.winfo_children():
+            widget.destroy()
+
+        # Status Frame
+        status_frame = tk.Frame(self.window, bg='#2C3E50')
+        status_frame.pack(fill='x', padx=20, pady=10)
+
+        # Player Status
+        player_status = tk.Label(
+            status_frame,
+            text=f"Player: {self.player.name} | HP: {self.player.health}/{self.player.max_health} | Level: {self.player.level} | Gold: {self.player.gold}",
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        )
+        player_status.pack(side='left')
+
+        # Stage Info
+        stage_info = tk.Label(
+            self.window,
+            text=f"Stage {self.stage}/5",
+            font=("Arial", 16, "bold"),
+            bg='#2C3E50',
+            fg='white'
+        )
+        stage_info.pack(pady=10)
+
+        # Enemy Info
+        if self.current_enemy:
+            enemy_info = tk.Label(
+                self.window,
+                text=f"Enemy: {self.current_enemy.name} | HP: {self.current_enemy.health}",
+                font=("Arial", 14),
+                bg='#2C3E50',
+                fg='white'
+            )
+            enemy_info.pack(pady=10)
+
+        # Combat Buttons
+        button_frame = tk.Frame(self.window, bg='#2C3E50')
+        button_frame.pack(pady=20)
+
+        attack_btn = tk.Button(
+            button_frame,
+            text="Attack",
+            command=self.handle_attack,
+            font=("Arial", 12),
+            bg='#E74C3C',
+            fg='white',
+            padx=15,
+            pady=5
+        )
+        attack_btn.pack(side='left', padx=5)
+
+        special_btn = tk.Button(
+            button_frame,
+            text="Special Attack",
+            command=self.handle_special_attack,
+            font=("Arial", 12),
+            bg='#8E44AD',
+            fg='white',
+            padx=15,
+            pady=5
+        )
+        special_btn.pack(side='left', padx=5)
+
+        potion_btn = tk.Button(
+            button_frame,
+            text=f"Use Potion ({self.player.health_potions})",
+            command=self.handle_potion,
+            font=("Arial", 12),
+            bg='#27AE60',
+            fg='white',
+            padx=15,
+            pady=5
+        )
+        potion_btn.pack(side='left', padx=5)
+
+    def start_game(self):
+        name = self.name_entry.get().strip()
+        if not name:
+            messagebox.showerror("Error", "Please enter a name!")
+            return
+
+        character_class = self.char_var.get()
+        if character_class == "Warrior":
+            self.player = Warrior(name)
+        else:
+            self.player = Mage(name)
+
+        self.stage = 1
+        self.start_stage()
+
+    def start_stage(self):
+        if self.stage > 5:
+            messagebox.showinfo("Congratulations!", 
+                f"You've completed all stages!\nFinal Stats:\nLevel: {self.player.level}\nGold: {self.player.gold}")
+            self.window.quit()
+            return
+
+        # Create enemies based on stage
+        if self.stage < 3:
+            self.current_enemy = Goblin()
+        else:
+            self.current_enemy = Orc()
+
+        self.create_combat_gui()
+
+    def handle_attack(self):
+        if not self.current_enemy or not self.current_enemy.is_alive():
+            return
+
+        # Player attacks
+        damage = self.player.attack()
+        self.current_enemy.take_damage(damage)
+        
+        # Enemy attacks if alive
+        if self.current_enemy.is_alive():
+            enemy_damage = self.current_enemy.attack()
+            self.player.take_damage(enemy_damage)
+            message = f"You deal {damage} damage!\nEnemy deals {enemy_damage} damage!"
+        else:
+            message = self.handle_enemy_defeat()
+
+        self.create_combat_gui()
+        messagebox.showinfo("Combat Round", message)
+
+        if not self.player.is_alive():
+            messagebox.showinfo("Game Over", "You have been defeated!")
+            self.window.quit()
+
+    def handle_special_attack(self):
+        if not self.current_enemy or not self.current_enemy.is_alive():
+            return
+
+        # Player special attack
+        message, damage = self.player.special_ability()
+        self.current_enemy.take_damage(damage)
+        
+        # Enemy attacks if alive
+        if self.current_enemy.is_alive():
+            enemy_damage = self.current_enemy.attack()
+            self.player.take_damage(enemy_damage)
+            message += f"\nEnemy deals {enemy_damage} damage!"
+        else:
+            message += "\n" + self.handle_enemy_defeat()
+
+        self.create_combat_gui()
+        messagebox.showinfo("Combat Round", message)
+
+        if not self.player.is_alive():
+            messagebox.showinfo("Game Over", "You have been defeated!")
+            self.window.quit()
+
+    def handle_potion(self):
+        message = self.player.use_health_potion()
+        self.create_combat_gui()
+        messagebox.showinfo("Use Potion", message)
+
+    def handle_enemy_defeat(self):
+        loot_message = self.player.collect_loot(self.current_enemy.drop_loot())
+        self.player.gain_experience(25)
+        level_message = ""
+        if self.player.experience >= 100:
+            level_message = "\n" + self.player.level_up()
+        
+        self.stage += 1
+        self.start_stage()
+        
+        return f"Enemy defeated!\n{loot_message}{level_message}"
+
+    def run(self):
+        self.window.mainloop()
+
+if __name__ == "__main__":
+    game = RPGGame()
+    game.run() 
