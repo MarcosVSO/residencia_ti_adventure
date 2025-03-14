@@ -1,11 +1,12 @@
 import random
 
 class Enemy:
-    def __init__(self, name, health, attack_power, loot):
+    def __init__(self, name, health, attack_power, loot, image):
         self.name = name
         self.health = health
         self.attack_power = attack_power
         self.loot = loot
+        self.image = image
 
     def attack(self):
         return self.attack_power
@@ -27,7 +28,7 @@ class Goblin(Enemy):
             'gold': random.randint(5, 15),
             'health_potion': random.choice([0, 1])
         }
-        super().__init__("Goblin", health=50, attack_power=8, loot=loot)
+        super().__init__("Goblin", health=50, attack_power=8, loot=loot, image="assets/goblin_icon.png")
 
 class Orc(Enemy):
     def __init__(self):
@@ -36,4 +37,4 @@ class Orc(Enemy):
             'health_potion': random.choice([1, 2]),
             'weapon_upgrade': random.choice([0, 1])
         }
-        super().__init__("Orc", health=80, attack_power=12, loot=loot) 
+        super().__init__("Orc", health=80, attack_power=12, loot=loot, image="assets/orc_icon.png") 

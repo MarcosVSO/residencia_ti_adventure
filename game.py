@@ -161,6 +161,17 @@ class RPGGame:
 
         # Enemy Info
         if self.current_enemy:
+            enemy_image = Image.open(self.current_enemy.image)
+            enemy_image = enemy_image.resize((100, 100), Image.Resampling.LANCZOS)
+            enemy_photo = ImageTk.PhotoImage(enemy_image)
+            enemy_icon = tk.Label(
+                self.window,
+                image=enemy_photo,
+                bg='#2C3E50'
+            )
+            enemy_icon.image = enemy_photo
+            enemy_icon.pack(pady=10)
+
             enemy_info = tk.Label(
                 self.window,
                 text=f"Enemy: {self.current_enemy.name} | HP: {self.current_enemy.health}",
