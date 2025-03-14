@@ -287,41 +287,107 @@ class RPGGame:
         button_frame = tk.Frame(self.window, bg='#2C3E50')
         button_frame.pack(pady=20)
 
-        attack_btn = tk.Button(
-            button_frame,
-            text="Atacar",
-            command=self.handle_attack,
-            font=("Arial", 12),
-            bg='#E74C3C',
-            fg='white',
-            padx=15,
-            pady=5
-        )
-        attack_btn.pack(side='left', padx=5)
+        # Attack button with icon
+        try:
+            attack_image = Image.open("assets/attack_icon.png")
+            attack_image = attack_image.resize((20, 20), Image.Resampling.LANCZOS)
+            attack_photo = ImageTk.PhotoImage(attack_image)
+            attack_btn = tk.Button(
+                button_frame,
+                text="Atacar",
+                image=attack_photo,
+                compound=tk.LEFT,
+                command=self.handle_attack,
+                font=("Arial", 12),
+                bg='#E74C3C',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            attack_btn.image = attack_photo
+            attack_btn.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading attack icon: {e}")
+            # Fallback without icon
+            attack_btn = tk.Button(
+                button_frame,
+                text="Atacar",
+                command=self.handle_attack,
+                font=("Arial", 12),
+                bg='#E74C3C',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            attack_btn.pack(side='left', padx=5)
 
-        special_btn = tk.Button(
-            button_frame,
-            text="Ataque Especial",
-            command=self.handle_special_attack,
-            font=("Arial", 12),
-            bg='#8E44AD',
-            fg='white',
-            padx=15,
-            pady=5
-        )
-        special_btn.pack(side='left', padx=5)
+        # Special Attack button with icon
+        try:
+            special_image = Image.open("assets/especial_attack_icon.png")
+            special_image = special_image.resize((20, 20), Image.Resampling.LANCZOS)
+            special_photo = ImageTk.PhotoImage(special_image)
+            special_btn = tk.Button(
+                button_frame,
+                text="Ataque Especial",
+                image=special_photo,
+                compound=tk.LEFT,
+                command=self.handle_special_attack,
+                font=("Arial", 12),
+                bg='#8E44AD',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            special_btn.image = special_photo
+            special_btn.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading special attack icon: {e}")
+            # Fallback without icon
+            special_btn = tk.Button(
+                button_frame,
+                text="Ataque Especial",
+                command=self.handle_special_attack,
+                font=("Arial", 12),
+                bg='#8E44AD',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            special_btn.pack(side='left', padx=5)
 
-        potion_btn = tk.Button(
-            button_frame,
-            text=f"Usar Poção ({self.player.health_potions})",
-            command=self.handle_potion,
-            font=("Arial", 12),
-            bg='#27AE60',
-            fg='white',
-            padx=15,
-            pady=5
-        )
-        potion_btn.pack(side='left', padx=5)
+        # Potion button with icon
+        try:
+            potion_image = Image.open("assets/potion_icon.png")
+            potion_image = potion_image.resize((20, 20), Image.Resampling.LANCZOS)
+            potion_photo = ImageTk.PhotoImage(potion_image)
+            potion_btn = tk.Button(
+                button_frame,
+                text=f"Usar Poção ({self.player.health_potions})",
+                image=potion_photo,
+                compound=tk.LEFT,
+                command=self.handle_potion,
+                font=("Arial", 12),
+                bg='#27AE60',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            potion_btn.image = potion_photo
+            potion_btn.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading potion icon: {e}")
+            # Fallback without icon
+            potion_btn = tk.Button(
+                button_frame,
+                text=f"Usar Poção ({self.player.health_potions})",
+                command=self.handle_potion,
+                font=("Arial", 12),
+                bg='#27AE60',
+                fg='white',
+                padx=15,
+                pady=5
+            )
+            potion_btn.pack(side='left', padx=5)
 
     def start_game(self):
         name = self.name_entry.get().strip()
