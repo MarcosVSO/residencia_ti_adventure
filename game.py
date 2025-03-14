@@ -289,7 +289,7 @@ class RPGGame:
 
         attack_btn = tk.Button(
             button_frame,
-            text="Attack",
+            text="Atacar",
             command=self.handle_attack,
             font=("Arial", 12),
             bg='#E74C3C',
@@ -301,7 +301,7 @@ class RPGGame:
 
         special_btn = tk.Button(
             button_frame,
-            text="Special Attack",
+            text="Ataque Especial",
             command=self.handle_special_attack,
             font=("Arial", 12),
             bg='#8E44AD',
@@ -313,7 +313,7 @@ class RPGGame:
 
         potion_btn = tk.Button(
             button_frame,
-            text=f"Use Potion ({self.player.health_potions})",
+            text=f"Usar Poção ({self.player.health_potions})",
             command=self.handle_potion,
             font=("Arial", 12),
             bg='#27AE60',
@@ -326,7 +326,7 @@ class RPGGame:
     def start_game(self):
         name = self.name_entry.get().strip()
         if not name:
-            messagebox.showerror("Error", "Please enter a name!")
+            messagebox.showerror("Error", "Escreva seu nome!")
             return
 
         character_class = self.char_var.get()
@@ -340,9 +340,9 @@ class RPGGame:
 
     def start_stage(self):
         if self.stage > 5:
-            messagebox.showinfo("Congratulations!", 
-                f"You've completed all stages!\nFinal Stats:\nLevel: {self.player.level}\nGold: {self.player.gold}")
-            self.window.quit()
+            messagebox.showinfo("Parabéns!", 
+                f"Você venceu todos os inimigos!")
+            # self.window.quit()
             return
 
         # Create enemies based on stage
@@ -357,23 +357,34 @@ class RPGGame:
         if not self.current_enemy or not self.current_enemy.is_alive():
             return
 
-        # Player attacks
+        # Player attacks and generates resource
         damage = self.player.attack()
         self.current_enemy.take_damage(damage)
+        
+        # Generate rage/mana on attack
+        resource_message = ""
+        if isinstance(self.player, Warrior):
+            rage_gain = 10
+            self.player.rage = min(100, self.player.rage + rage_gain)
+            resource_message = f"\nRaiva gerada: +{rage_gain}"
+        elif isinstance(self.player, Mage):
+            mana_gain = 15
+            self.player.mana = min(100, self.player.mana + mana_gain)
+            resource_message = f"\nMana regenerada: +{mana_gain}"
         
         # Enemy attacks if alive
         if self.current_enemy.is_alive():
             enemy_damage = self.current_enemy.attack()
             self.player.take_damage(enemy_damage)
-            message = f"You deal {damage} damage!\nEnemy deals {enemy_damage} damage!"
+            message = f"Você causou {damage} de dano!{resource_message}\nInimigo causou {enemy_damage} de dano!"
         else:
             message = self.handle_enemy_defeat()
 
         self.create_combat_gui()
-        messagebox.showinfo("Combat Round", message)
+        messagebox.showinfo("Combate", message)
 
         if not self.player.is_alive():
-            messagebox.showinfo("Game Over", "You have been defeated!")
+            messagebox.showinfo("Game Over", "Você foi derrotado!")
             self.window.quit()
 
     def handle_special_attack(self):
