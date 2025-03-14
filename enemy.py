@@ -34,7 +34,6 @@ class Orc(Enemy):
     def __init__(self):
         loot = {
             'gold': random.randint(15, 30),
-            'health_potion': random.choice([1, 2]),
-            'weapon_upgrade': random.choice([0, 1])
+            'health_potion': random.choice([1, 2])
         }
         super().__init__("Orc", health=80, attack_power=12, loot=loot, image="assets/orc_icon.png") 

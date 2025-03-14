@@ -36,14 +36,8 @@ class Character:
     def collect_loot(self, loot):
         self.gold += loot.get('gold', 0)
         self.health_potions += loot.get('health_potion', 0)
-        if loot.get('weapon_upgrade', 0) > 0:
-            if isinstance(self.weapon, Sword):
-                self.weapon = Sword(upgrade=True)
-            elif isinstance(self.weapon, Wand):
-                self.weapon = Wand(upgrade=True)
         
-        return f"Collected: {loot['gold']} gold, {loot.get('health_potion', 0)} health potions" + \
-               (", Weapon upgraded!" if loot.get('weapon_upgrade', 0) > 0 else "")
+        return f"Coletado: {loot['gold']} de ouro, {loot.get('health_potion', 0)} poções de vida"
 
     def gain_experience(self, amount):
         self.experience += amount
