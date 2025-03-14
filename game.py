@@ -20,10 +20,12 @@ class RPGGame:
         try:
             self.title_sound = pygame.mixer.Sound("assets/title_screen_sound.mp3")
             self.fight_sound = pygame.mixer.Sound("assets/fight_screen_sound.mp3")
+            self.victory_sound = pygame.mixer.Sound("assets/victory_sound.mp3")
         except Exception as e:
             print(f"Error loading sounds: {e}")
             self.title_sound = None
             self.fight_sound = None
+            self.victory_sound = None
         
         self.player = None
         self.current_enemy = None
@@ -433,6 +435,12 @@ class RPGGame:
 
     def start_stage(self):
         if self.stage > 5:
+            # Stop fight music and play victory sound
+            if self.fight_sound:
+                self.fight_sound.stop()
+            if self.victory_sound:
+                self.victory_sound.play()
+            
             messagebox.showinfo("Parabéns!", 
                 f"Você venceu todos os inimigos!")
             self.window.quit()
