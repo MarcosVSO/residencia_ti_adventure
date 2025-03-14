@@ -3,12 +3,13 @@ from tkinter import ttk, messagebox
 from character import Warrior, Mage
 from enemy import Goblin, Orc
 import random
+from PIL import Image, ImageTk  # Add PIL import for image handling
 
 class RPGGame:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("Fantasy RPG Game")
-        self.window.geometry("600x400")
+        self.window.title("Residência TI Adventure")
+        self.window.geometry("800x600")
         self.window.configure(bg='#2C3E50')
         
         self.player = None
@@ -17,15 +18,22 @@ class RPGGame:
         self.setup_gui()
 
     def setup_gui(self):
-        # Title
-        title_label = tk.Label(
-            self.window,
-            text="Fantasy RPG Game",
-            font=("Arial", 24, "bold"),
-            bg='#2C3E50',
-            fg='white'
-        )
-        title_label.pack(pady=20)
+        # Logo
+        try:
+            logo_image = Image.open("assets/logo_residencia_ti_adventure.png")
+            # Resize the image to fit nicely in the window (adjust size as needed)
+            logo_image = logo_image.resize((300, 300), Image.Resampling.LANCZOS)
+            logo_photo = ImageTk.PhotoImage(logo_image)
+            logo_label = tk.Label(
+                self.window,
+                image=logo_photo,
+                bg='#2C3E50'
+            )
+            logo_label.image = logo_photo  # Keep a reference to prevent garbage collection
+            logo_label.pack(pady=10)
+        except Exception as e:
+            print(f"Error loading logo: {e}")
+
 
         # Character Selection
         self.char_var = tk.StringVar(value="Warrior")
@@ -34,28 +42,64 @@ class RPGGame:
 
         char_label = tk.Label(
             char_frame,
-            text="Choose your character:",
+            text="Selecione seu personagem",
             font=("Arial", 12),
             bg='#2C3E50',
             fg='white'
         )
         char_label.pack()
 
+        # Warrior selection with icon
+        warrior_frame = tk.Frame(char_frame, bg='#2C3E50')
+        warrior_frame.pack(pady=5)
+        
+        try:
+            warrior_image = Image.open("assets/warrior_icon.png")
+            warrior_image = warrior_image.resize((50, 50), Image.Resampling.LANCZOS)
+            warrior_photo = ImageTk.PhotoImage(warrior_image)
+            warrior_icon = tk.Label(
+                warrior_frame,
+                image=warrior_photo,
+                bg='#2C3E50'
+            )
+            warrior_icon.image = warrior_photo
+            warrior_icon.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading warrior icon: {e}")
+
         warrior_rb = ttk.Radiobutton(
-            char_frame,
+            warrior_frame,
             text="Warrior",
             value="Warrior",
             variable=self.char_var
         )
-        warrior_rb.pack()
+        warrior_rb.pack(side='left')
+
+        # Mage selection with icon
+        mage_frame = tk.Frame(char_frame, bg='#2C3E50')
+        mage_frame.pack(pady=5)
+        
+        try:
+            mage_image = Image.open("assets/mage_icon.png")
+            mage_image = mage_image.resize((50, 50), Image.Resampling.LANCZOS)
+            mage_photo = ImageTk.PhotoImage(mage_image)
+            mage_icon = tk.Label(
+                mage_frame,
+                image=mage_photo,
+                bg='#2C3E50'
+            )
+            mage_icon.image = mage_photo
+            mage_icon.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading mage icon: {e}")
 
         mage_rb = ttk.Radiobutton(
-            char_frame,
+            mage_frame,
             text="Mage",
             value="Mage",
             variable=self.char_var
         )
-        mage_rb.pack()
+        mage_rb.pack(side='left')
 
         # Name Entry
         name_frame = tk.Frame(self.window, bg='#2C3E50')
@@ -76,7 +120,7 @@ class RPGGame:
         # Start Button
         start_button = tk.Button(
             self.window,
-            text="Start Game",
+            text="Começar Jogo",
             command=self.start_game,
             font=("Arial", 14),
             bg='#27AE60',
