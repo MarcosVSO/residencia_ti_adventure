@@ -30,8 +30,8 @@ class Character:
             self.health_potions -= 1
             heal_amount = 30
             self.health = min(self.max_health, self.health + heal_amount)
-            return f"Used a health potion. Healed for {heal_amount} HP!"
-        return "No health potions available!"
+            return f"Usou uma poção de vida. Curou {heal_amount} de vida!"
+        return "Não há poções de vida disponíveis!"
 
     def collect_loot(self, loot):
         self.gold += loot.get('gold', 0)
@@ -50,7 +50,7 @@ class Character:
         self.max_health += 20
         self.health = self.max_health
         self.attack_power += 5
-        return f"Level Up! Now level {self.level}! Health and attack power increased!"
+        return f"Level Up! Agora você está no nível {self.level}! Vida e poder de ataque aumentados!"
 
 class Warrior(Character):
     def __init__(self, name):
@@ -61,9 +61,9 @@ class Warrior(Character):
     def special_ability(self):
         if self.rage >= 30:
             self.rage = 0
-            return "Berserker Rage: Double damage for next attack!", self.attack() * 2
+            return "Fúria Berserker: Dano duplo para o próximo ataque!", self.attack() * 2
         self.rage += 10
-        return "Not enough rage! (Gained 10 rage)", self.attack()
+        return "Não há fúria suficiente! (Ganhou 10 fúria)", self.attack()
 
 class Mage(Character):
     def __init__(self, name):
@@ -74,5 +74,5 @@ class Mage(Character):
     def special_ability(self):
         if self.mana >= 30:
             self.mana -= 30
-            return "Fireball: Deal massive magical damage!", self.attack() * 1.8
-        return "Not enough mana!", self.attack() 
+            return "Bola de Fogo: Causar dano mágico devastador!", self.attack() * 1.8
+        return "Não há mana suficiente!", self.attack() 

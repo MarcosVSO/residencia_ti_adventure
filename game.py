@@ -200,7 +200,7 @@ class RPGGame:
         except Exception as e:
             print(f"Error loading resource icon: {e}")
         
-        resource_text = f"Rage: {self.player.rage}" if isinstance(self.player, Warrior) else f"Mana: {self.player.mana}"
+        resource_text = f"Raiva: {self.player.rage}" if isinstance(self.player, Warrior) else f"Mana: {self.player.mana}"
         tk.Label(
             resource_frame,
             text=resource_text,
@@ -254,7 +254,7 @@ class RPGGame:
         # Stage Info
         stage_info = tk.Label(
             self.window,
-            text=f"Stage {self.stage}/5",
+            text=f"Fase {self.stage}/5",
             font=("Arial", 16, "bold"),
             bg='#2C3E50',
             fg='white'
@@ -276,7 +276,7 @@ class RPGGame:
 
             enemy_info = tk.Label(
                 self.window,
-                text=f"Enemy: {self.current_enemy.name} | HP: {self.current_enemy.health}",
+                text=f"{self.current_enemy.name} | HP: {self.current_enemy.health}",
                 font=("Arial", 14),
                 bg='#2C3E50',
                 fg='white'
@@ -408,7 +408,7 @@ class RPGGame:
         if self.stage > 5:
             messagebox.showinfo("Parabéns!", 
                 f"Você venceu todos os inimigos!")
-            # self.window.quit()
+            self.window.quit()
             return
 
         # Create enemies based on stage
