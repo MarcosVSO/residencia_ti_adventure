@@ -139,15 +139,117 @@ class RPGGame:
         status_frame = tk.Frame(self.window, bg='#2C3E50')
         status_frame.pack(fill='x', padx=20, pady=10)
 
-        # Player Status
-        player_status = tk.Label(
-            status_frame,
-            text=f"Player: {self.player.name} | HP: {self.player.health}/{self.player.max_health} | Level: {self.player.level} | Gold: {self.player.gold}",
+        # Player Status Frame with icons
+        player_status_frame = tk.Frame(status_frame, bg='#2C3E50')
+        player_status_frame.pack(side='left', padx=10)
+
+        # Player Name with character icon
+        name_frame = tk.Frame(player_status_frame, bg='#2C3E50')
+        name_frame.pack(fill='x', pady=2)
+        try:
+            char_icon = "assets/warrior_icon.png" if isinstance(self.player, Warrior) else "assets/mage_icon.png"
+            char_image = Image.open(char_icon)
+            char_image = char_image.resize((30, 30), Image.Resampling.LANCZOS)
+            char_photo = ImageTk.PhotoImage(char_image)
+            char_label = tk.Label(name_frame, image=char_photo, bg='#2C3E50')
+            char_label.image = char_photo
+            char_label.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading character icon: {e}")
+        
+        tk.Label(
+            name_frame,
+            text=f"Player: {self.player.name}",
+            font=("Arial", 12, "bold"),
+            bg='#2C3E50',
+            fg='white'
+        ).pack(side='left')
+
+        # HP with icon
+        hp_frame = tk.Frame(player_status_frame, bg='#2C3E50')
+        hp_frame.pack(fill='x', pady=2)
+        try:
+            hp_image = Image.open("assets/health_icon.png")
+            hp_image = hp_image.resize((20, 20), Image.Resampling.LANCZOS)
+            hp_photo = ImageTk.PhotoImage(hp_image)
+            hp_icon = tk.Label(hp_frame, image=hp_photo, bg='#2C3E50')
+            hp_icon.image = hp_photo
+            hp_icon.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading HP icon: {e}")
+        
+        tk.Label(
+            hp_frame,
+            text=f"HP: {self.player.health}/{self.player.max_health}",
             font=("Arial", 12),
             bg='#2C3E50',
             fg='white'
-        )
-        player_status.pack(side='left')
+        ).pack(side='left')
+
+        # Resource (Rage/Mana) with icon
+        resource_frame = tk.Frame(player_status_frame, bg='#2C3E50')
+        resource_frame.pack(fill='x', pady=2)
+        try:
+            resource_icon = "assets/rage_icon.png" if isinstance(self.player, Warrior) else "assets/mana_icon.png"
+            resource_image = Image.open(resource_icon)
+            resource_image = resource_image.resize((20, 20), Image.Resampling.LANCZOS)
+            resource_photo = ImageTk.PhotoImage(resource_image)
+            resource_label = tk.Label(resource_frame, image=resource_photo, bg='#2C3E50')
+            resource_label.image = resource_photo
+            resource_label.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading resource icon: {e}")
+        
+        resource_text = f"Rage: {self.player.rage}" if isinstance(self.player, Warrior) else f"Mana: {self.player.mana}"
+        tk.Label(
+            resource_frame,
+            text=resource_text,
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        ).pack(side='left')
+
+        # Level with icon
+        level_frame = tk.Frame(player_status_frame, bg='#2C3E50')
+        level_frame.pack(fill='x', pady=2)
+        try:
+            level_image = Image.open("assets/level_icon.png")
+            level_image = level_image.resize((20, 20), Image.Resampling.LANCZOS)
+            level_photo = ImageTk.PhotoImage(level_image)
+            level_icon = tk.Label(level_frame, image=level_photo, bg='#2C3E50')
+            level_icon.image = level_photo
+            level_icon.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading level icon: {e}")
+        
+        tk.Label(
+            level_frame,
+            text=f"Level: {self.player.level}",
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        ).pack(side='left')
+
+        # Gold with icon
+        gold_frame = tk.Frame(player_status_frame, bg='#2C3E50')
+        gold_frame.pack(fill='x', pady=2)
+        try:
+            gold_image = Image.open("assets/gold_icon.png")
+            gold_image = gold_image.resize((20, 20), Image.Resampling.LANCZOS)
+            gold_photo = ImageTk.PhotoImage(gold_image)
+            gold_icon = tk.Label(gold_frame, image=gold_photo, bg='#2C3E50')
+            gold_icon.image = gold_photo
+            gold_icon.pack(side='left', padx=5)
+        except Exception as e:
+            print(f"Error loading gold icon: {e}")
+        
+        tk.Label(
+            gold_frame,
+            text=f"Gold: {self.player.gold}",
+            font=("Arial", 12),
+            bg='#2C3E50',
+            fg='white'
+        ).pack(side='left')
 
         # Stage Info
         stage_info = tk.Label(
