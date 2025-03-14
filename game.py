@@ -4,6 +4,7 @@ from character import Warrior, Mage
 from enemy import Goblin, Orc
 import random
 from PIL import Image, ImageTk  # Add PIL import for image handling
+import pygame  # Add pygame for sound
 
 class RPGGame:
     def __init__(self):
@@ -12,10 +13,26 @@ class RPGGame:
         self.window.geometry("800x600")
         self.window.configure(bg='#2C3E50')
         
+        # Initialize pygame mixer for sound
+        pygame.mixer.init()
+        
+        # Load sound effects
+        try:
+            self.title_sound = pygame.mixer.Sound("assets/title_screen_sound.mp3")
+            self.fight_sound = pygame.mixer.Sound("assets/fight_screen_sound.mp3")
+        except Exception as e:
+            print(f"Error loading sounds: {e}")
+            self.title_sound = None
+            self.fight_sound = None
+        
         self.player = None
         self.current_enemy = None
         self.stage = 0
         self.setup_gui()
+        
+        # Play title screen music
+        if self.title_sound:
+            self.title_sound.play(-1)  # -1 means loop indefinitely
 
     def setup_gui(self):
         # Logo
@@ -49,13 +66,17 @@ class RPGGame:
         )
         char_label.pack()
 
+        # Character selection container
+        char_select_frame = tk.Frame(char_frame, bg='#2C3E50')
+        char_select_frame.pack(pady=10)
+
         # Warrior selection with icon
-        warrior_frame = tk.Frame(char_frame, bg='#2C3E50')
-        warrior_frame.pack(pady=5)
+        warrior_frame = tk.Frame(char_select_frame, bg='#2C3E50')
+        warrior_frame.pack(side='left', padx=20)
         
         try:
             warrior_image = Image.open("assets/warrior_icon.png")
-            warrior_image = warrior_image.resize((50, 50), Image.Resampling.LANCZOS)
+            warrior_image = warrior_image.resize((80, 80), Image.Resampling.LANCZOS)
             warrior_photo = ImageTk.PhotoImage(warrior_image)
             warrior_icon = tk.Label(
                 warrior_frame,
@@ -63,25 +84,25 @@ class RPGGame:
                 bg='#2C3E50'
             )
             warrior_icon.image = warrior_photo
-            warrior_icon.pack(side='left', padx=5)
+            warrior_icon.pack(pady=5)
         except Exception as e:
             print(f"Error loading warrior icon: {e}")
 
         warrior_rb = ttk.Radiobutton(
             warrior_frame,
-            text="Warrior",
+            text="Guerreiro",
             value="Warrior",
             variable=self.char_var
         )
-        warrior_rb.pack(side='left')
+        warrior_rb.pack()
 
         # Mage selection with icon
-        mage_frame = tk.Frame(char_frame, bg='#2C3E50')
-        mage_frame.pack(pady=5)
+        mage_frame = tk.Frame(char_select_frame, bg='#2C3E50')
+        mage_frame.pack(side='left', padx=20)
         
         try:
             mage_image = Image.open("assets/mage_icon.png")
-            mage_image = mage_image.resize((50, 50), Image.Resampling.LANCZOS)
+            mage_image = mage_image.resize((80, 80), Image.Resampling.LANCZOS)
             mage_photo = ImageTk.PhotoImage(mage_image)
             mage_icon = tk.Label(
                 mage_frame,
@@ -89,17 +110,17 @@ class RPGGame:
                 bg='#2C3E50'
             )
             mage_icon.image = mage_photo
-            mage_icon.pack(side='left', padx=5)
+            mage_icon.pack(pady=5)
         except Exception as e:
             print(f"Error loading mage icon: {e}")
 
         mage_rb = ttk.Radiobutton(
             mage_frame,
-            text="Mage",
+            text="Mago",
             value="Mage",
             variable=self.char_var
         )
-        mage_rb.pack(side='left')
+        mage_rb.pack()
 
         # Name Entry
         name_frame = tk.Frame(self.window, bg='#2C3E50')
@@ -107,7 +128,7 @@ class RPGGame:
 
         name_label = tk.Label(
             name_frame,
-            text="Enter your name:",
+            text="Digite seu nome:",
             font=("Arial", 12),
             bg='#2C3E50',
             fg='white'
@@ -395,6 +416,12 @@ class RPGGame:
             messagebox.showerror("Error", "Escreva seu nome!")
             return
 
+        # Stop title screen music and play fight music
+        if self.title_sound:
+            self.title_sound.stop()
+        if self.fight_sound:
+            self.fight_sound.play(-1)
+
         character_class = self.char_var.get()
         if character_class == "Warrior":
             self.player = Warrior(name)
@@ -492,6 +519,13 @@ class RPGGame:
         self.start_stage()
         
         return f"Enemy defeated!\n{loot_message}{level_message}"
+
+    def __del__(self):
+        # Clean up pygame mixer when the game closes
+        try:
+            pygame.mixer.quit()
+        except:
+            pass
 
     def run(self):
         self.window.mainloop()
