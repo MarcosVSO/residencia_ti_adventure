@@ -59,7 +59,7 @@ class RPGGame:
         char_frame = tk.Frame(self.window, bg='#2C3E50')
         char_frame.pack(pady=10)
 
-        # Rótulo para seleção de personagem
+        # Label para seleção de personagem
         char_label = tk.Label(
             char_frame,
             text="Selecione seu personagem",
@@ -69,15 +69,14 @@ class RPGGame:
         )
         char_label.pack()
 
-        # Frame para os personagens lado a lado
+        # Frame para os personagens
         char_select_frame = tk.Frame(char_frame, bg='#2C3E50')
         char_select_frame.pack(pady=10)
 
-        # Frame do Guerreiro
+        # Frame do Warrior
         warrior_frame = tk.Frame(char_select_frame, bg='#2C3E50')
         warrior_frame.pack(side='left', padx=20)
         
-        # Carrega e exibe o ícone do Guerreiro
         try:
             warrior_image = Image.open("assets/warrior_icon.png")
             warrior_image = warrior_image.resize((80, 80), Image.Resampling.LANCZOS)
@@ -92,7 +91,7 @@ class RPGGame:
         except Exception as e:
             print(f"Erro ao carregar ícone do guerreiro: {e}")
 
-        # Botão de rádio para selecionar Guerreiro
+        # Botão para selecionar Guerreiro
         warrior_rb = ttk.Radiobutton(
             warrior_frame,
             text="Guerreiro",
@@ -105,7 +104,6 @@ class RPGGame:
         mage_frame = tk.Frame(char_select_frame, bg='#2C3E50')
         mage_frame.pack(side='left', padx=20)
         
-        # Carrega e exibe o ícone do Mago
         try:
             mage_image = Image.open("assets/mage_icon.png")
             mage_image = mage_image.resize((80, 80), Image.Resampling.LANCZOS)
@@ -120,7 +118,7 @@ class RPGGame:
         except Exception as e:
             print(f"Erro ao carregar ícone do mago: {e}")
 
-        # Botão de rádio para selecionar Mago
+        # Botão para selecionar Mago
         mage_rb = ttk.Radiobutton(
             mage_frame,
             text="Mago",
@@ -129,11 +127,11 @@ class RPGGame:
         )
         mage_rb.pack()
 
-        # Frame para entrada do nome
+        # Frame para inserir o nome
         name_frame = tk.Frame(self.window, bg='#2C3E50')
         name_frame.pack(pady=10)
 
-        # Rótulo para entrada do nome
+        # Label para inserir o nome
         name_label = tk.Label(
             name_frame,
             text="Digite seu nome:",
@@ -143,7 +141,7 @@ class RPGGame:
         )
         name_label.pack()
 
-        # Campo de entrada do nome
+        # Nome Input
         self.name_entry = tk.Entry(name_frame)
         self.name_entry.pack()
 
@@ -161,7 +159,6 @@ class RPGGame:
         start_button.pack(pady=20)
 
     def create_combat_gui(self):
-        # Limpa a janela e configura o tamanho
         self.window.geometry("800x600")
         for widget in self.window.winfo_children():
             widget.destroy()
@@ -197,7 +194,7 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Frame para HP com ícone
+        # Frame para HP
         hp_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         hp_frame.pack(fill='x', pady=2)
         try:
@@ -219,7 +216,7 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Frame para recurso (Raiva/Mana) com ícone
+        # Frame para recurso (Raiva/Mana)
         resource_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         resource_frame.pack(fill='x', pady=2)
         try:
@@ -243,7 +240,7 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Frame para nível com ícone
+        # Frame para nível
         level_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         level_frame.pack(fill='x', pady=2)
         try:
@@ -265,7 +262,7 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Frame para ouro com ícone
+        # Frame para ouro
         gold_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         gold_frame.pack(fill='x', pady=2)
         try:
@@ -297,7 +294,7 @@ class RPGGame:
         )
         stage_info.pack(pady=10)
 
-        # Exibe inimigo atual com ícone
+        # Exibe inimigo atual
         if self.current_enemy:
             enemy_image = Image.open(self.current_enemy.image)
             enemy_image = enemy_image.resize((100, 100), Image.Resampling.LANCZOS)
@@ -324,7 +321,7 @@ class RPGGame:
         button_frame = tk.Frame(self.window, bg='#2C3E50')
         button_frame.pack(pady=20)
 
-        # Botão de ataque com ícone
+        # Botão de ataque
         try:
             attack_image = Image.open("assets/attack_icon.png")
             attack_image = attack_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -357,7 +354,7 @@ class RPGGame:
             )
             attack_btn.pack(side='left', padx=5)
 
-        # Botão de ataque especial com ícone
+        # Botão de ataque especial
         try:
             special_image = Image.open("assets/especial_attack_icon.png")
             special_image = special_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -390,7 +387,7 @@ class RPGGame:
             )
             special_btn.pack(side='left', padx=5)
 
-        # Botão de poção com ícone
+        # Botão de poção
         try:
             potion_image = Image.open("assets/potion_icon.png")
             potion_image = potion_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -450,7 +447,6 @@ class RPGGame:
     def start_stage(self):
         # Verifica se o jogo foi completado
         if self.stage > 5:
-            # Toca o som de vitória
             if self.fight_sound:
                 self.fight_sound.stop()
             if self.victory_sound:
@@ -551,7 +547,6 @@ class RPGGame:
         return f"Inimigo Derrotado!\n{loot_message}{level_message}"
 
     def __del__(self):
-        # Limpa o sistema de áudio ao fechar o jogo
         try:
             pygame.mixer.quit()
         except:

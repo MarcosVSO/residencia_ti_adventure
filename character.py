@@ -1,5 +1,6 @@
 from weapon import Sword, Wand
 
+#Super classe personagem com atributos básicos e métodos
 class Character:
     def __init__(self, name, health, attack_power):
         self.name = name
@@ -52,6 +53,7 @@ class Character:
         self.attack_power += 5
         return f"Level Up! Agora você está no nível {self.level}! Vida e poder de ataque aumentados!"
 
+#Subclasse guerreiro com as especificações como arma, quantidade inicial de vida e poder de ataque e raiva
 class Warrior(Character):
     def __init__(self, name):
         super().__init__(name, health=100, attack_power=15)
@@ -64,7 +66,8 @@ class Warrior(Character):
             return "Fúria Berserker: Dano duplo para o próximo ataque!", self.attack() * 2
         self.rage += 10
         return "Não há fúria suficiente! (Ganhou 10 fúria)", self.attack()
-
+    
+#Subclasse mago com as especificações como arma, quantidade inicial de vida e poder de ataque e mana
 class Mage(Character):
     def __init__(self, name):
         super().__init__(name, health=80, attack_power=10)

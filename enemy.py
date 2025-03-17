@@ -1,5 +1,6 @@
 import random
 
+#Super classe inimigo com atributos básicos e métodos
 class Enemy:
     def __init__(self, name, health, attack_power, loot, image):
         self.name = name
@@ -22,6 +23,7 @@ class Enemy:
     def drop_loot(self):
         return self.loot
 
+#Subclasse Goblin que é um tipo de inimigo especificando o loot que ele derruba ao ser derrotado
 class Goblin(Enemy):
     def __init__(self):
         loot = {
@@ -30,6 +32,7 @@ class Goblin(Enemy):
         }
         super().__init__("Goblin", health=50, attack_power=8, loot=loot, image="assets/goblin_icon.png")
 
+#Subclasse Orc que é um tipo de inimigo especificando o loot que ele derruba ao ser derrotado
 class Orc(Enemy):
     def __init__(self):
         loot = {
