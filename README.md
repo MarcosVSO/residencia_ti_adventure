@@ -55,6 +55,105 @@ python game.py
 - Recupera 15 de Mana por ataque
 - Mais frágil
 
+## Diagrama de Classes
+
+```mermaid
+classDiagram
+    class Character {
+        <<abstract>>
+        +str name
+        +int health
+        +int max_health
+        +int level
+        +int experience
+        +int gold
+        +int health_potions
+        +Weapon weapon
+        +attack() int
+        +take_damage(int) void
+        +is_alive() bool
+        +gain_experience(int) void
+        +level_up() str
+        +use_health_potion() str
+        +collect_loot(dict) str
+        +special_ability() tuple
+    }
+
+    class Warrior {
+        +int rage
+        +special_ability() tuple
+    }
+
+    class Mage {
+        +int mana
+        +special_ability() tuple
+    }
+
+    class Weapon {
+        <<abstract>>
+        +str name
+        +int damage
+        +get_damage() int
+    }
+
+    class Sword {
+        +get_damage() int
+    }
+
+    class Wand {
+        +get_damage() int
+    }
+
+    class Enemy {
+        <<abstract>>
+        +str name
+        +int health
+        +str image
+        +attack() int
+        +take_damage(int) void
+        +is_alive() bool
+        +drop_loot() dict
+    }
+
+    class Goblin {
+        +drop_loot() dict
+    }
+
+    class Orc {
+        +drop_loot() dict
+    }
+
+    class RPGGame {
+        -tk.Tk window
+        -Character player
+        -Enemy current_enemy
+        -int stage
+        -pygame.mixer.Sound title_sound
+        -pygame.mixer.Sound fight_sound
+        -pygame.mixer.Sound victory_sound
+        +__init__()
+        +setup_gui()
+        +create_combat_gui()
+        +start_game()
+        +start_stage()
+        +handle_attack()
+        +handle_special_attack()
+        +handle_potion()
+        +handle_enemy_defeat()
+        +run()
+    }
+
+    Character <|-- Warrior
+    Character <|-- Mage
+    Weapon <|-- Sword
+    Weapon <|-- Wand
+    Enemy <|-- Goblin
+    Enemy <|-- Orc
+    Character --> Weapon
+    RPGGame --> Character
+    RPGGame --> Enemy
+```
+
 ## Recursos
 
 - Interface gráfica com Tkinter
