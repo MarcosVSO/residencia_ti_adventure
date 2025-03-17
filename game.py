@@ -3,8 +3,8 @@ from tkinter import ttk, messagebox
 from character import Warrior, Mage
 from enemy import Goblin, Orc
 import random
-from PIL import Image, ImageTk  # Add PIL import for image handling
-import pygame  # Add pygame for sound
+from PIL import Image, ImageTk
+import pygame
 
 class RPGGame:
     def __init__(self):
@@ -13,10 +13,8 @@ class RPGGame:
         self.window.geometry("800x600")
         self.window.configure(bg='#2C3E50')
         
-        # Initialize pygame mixer for sound
         pygame.mixer.init()
         
-        # Load sound effects
         try:
             self.title_sound = pygame.mixer.Sound("assets/title_screen_sound.mp3")
             self.fight_sound = pygame.mixer.Sound("assets/fight_screen_sound.mp3")
@@ -32,15 +30,12 @@ class RPGGame:
         self.stage = 0
         self.setup_gui()
         
-        # Play title screen music
         if self.title_sound:
-            self.title_sound.play(-1)  # -1 means loop indefinitely
+            self.title_sound.play(-1)
 
     def setup_gui(self):
-        # Logo
         try:
             logo_image = Image.open("assets/logo_residencia_ti_adventure.png")
-            # Resize the image to fit nicely in the window (adjust size as needed)
             logo_image = logo_image.resize((300, 300), Image.Resampling.LANCZOS)
             logo_photo = ImageTk.PhotoImage(logo_image)
             logo_label = tk.Label(
@@ -48,13 +43,12 @@ class RPGGame:
                 image=logo_photo,
                 bg='#2C3E50'
             )
-            logo_label.image = logo_photo  # Keep a reference to prevent garbage collection
+            logo_label.image = logo_photo
             logo_label.pack(pady=10)
         except Exception as e:
             print(f"Error loading logo: {e}")
 
 
-        # Character Selection
         self.char_var = tk.StringVar(value="Warrior")
         char_frame = tk.Frame(self.window, bg='#2C3E50')
         char_frame.pack(pady=10)
@@ -68,11 +62,9 @@ class RPGGame:
         )
         char_label.pack()
 
-        # Character selection container
         char_select_frame = tk.Frame(char_frame, bg='#2C3E50')
         char_select_frame.pack(pady=10)
 
-        # Warrior selection with icon
         warrior_frame = tk.Frame(char_select_frame, bg='#2C3E50')
         warrior_frame.pack(side='left', padx=20)
         
@@ -98,7 +90,6 @@ class RPGGame:
         )
         warrior_rb.pack()
 
-        # Mage selection with icon
         mage_frame = tk.Frame(char_select_frame, bg='#2C3E50')
         mage_frame.pack(side='left', padx=20)
         
@@ -124,7 +115,6 @@ class RPGGame:
         )
         mage_rb.pack()
 
-        # Name Entry
         name_frame = tk.Frame(self.window, bg='#2C3E50')
         name_frame.pack(pady=10)
 
@@ -140,7 +130,6 @@ class RPGGame:
         self.name_entry = tk.Entry(name_frame)
         self.name_entry.pack()
 
-        # Start Button
         start_button = tk.Button(
             self.window,
             text="Começar Jogo",
@@ -158,15 +147,12 @@ class RPGGame:
         for widget in self.window.winfo_children():
             widget.destroy()
 
-        # Status Frame
         status_frame = tk.Frame(self.window, bg='#2C3E50')
         status_frame.pack(fill='x', padx=20, pady=10)
 
-        # Player Status Frame with icons
         player_status_frame = tk.Frame(status_frame, bg='#2C3E50')
         player_status_frame.pack(side='left', padx=10)
 
-        # Player Name with character icon
         name_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         name_frame.pack(fill='x', pady=2)
         try:
@@ -188,7 +174,6 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # HP with icon
         hp_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         hp_frame.pack(fill='x', pady=2)
         try:
@@ -209,7 +194,6 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Resource (Rage/Mana) with icon
         resource_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         resource_frame.pack(fill='x', pady=2)
         try:
@@ -232,7 +216,6 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Level with icon
         level_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         level_frame.pack(fill='x', pady=2)
         try:
@@ -253,7 +236,6 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Gold with icon
         gold_frame = tk.Frame(player_status_frame, bg='#2C3E50')
         gold_frame.pack(fill='x', pady=2)
         try:
@@ -274,7 +256,6 @@ class RPGGame:
             fg='white'
         ).pack(side='left')
 
-        # Stage Info
         stage_info = tk.Label(
             self.window,
             text=f"Fase {self.stage}/5",
@@ -284,7 +265,6 @@ class RPGGame:
         )
         stage_info.pack(pady=10)
 
-        # Enemy Info
         if self.current_enemy:
             enemy_image = Image.open(self.current_enemy.image)
             enemy_image = enemy_image.resize((100, 100), Image.Resampling.LANCZOS)
@@ -306,11 +286,9 @@ class RPGGame:
             )
             enemy_info.pack(pady=10)
 
-        # Combat Buttons
         button_frame = tk.Frame(self.window, bg='#2C3E50')
         button_frame.pack(pady=20)
 
-        # Attack button with icon
         try:
             attack_image = Image.open("assets/attack_icon.png")
             attack_image = attack_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -331,7 +309,6 @@ class RPGGame:
             attack_btn.pack(side='left', padx=5)
         except Exception as e:
             print(f"Error loading attack icon: {e}")
-            # Fallback without icon
             attack_btn = tk.Button(
                 button_frame,
                 text="Atacar",
@@ -344,7 +321,6 @@ class RPGGame:
             )
             attack_btn.pack(side='left', padx=5)
 
-        # Special Attack button with icon
         try:
             special_image = Image.open("assets/especial_attack_icon.png")
             special_image = special_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -365,7 +341,6 @@ class RPGGame:
             special_btn.pack(side='left', padx=5)
         except Exception as e:
             print(f"Error loading special attack icon: {e}")
-            # Fallback without icon
             special_btn = tk.Button(
                 button_frame,
                 text="Ataque Especial",
@@ -378,7 +353,6 @@ class RPGGame:
             )
             special_btn.pack(side='left', padx=5)
 
-        # Potion button with icon
         try:
             potion_image = Image.open("assets/potion_icon.png")
             potion_image = potion_image.resize((20, 20), Image.Resampling.LANCZOS)
@@ -399,7 +373,6 @@ class RPGGame:
             potion_btn.pack(side='left', padx=5)
         except Exception as e:
             print(f"Error loading potion icon: {e}")
-            # Fallback without icon
             potion_btn = tk.Button(
                 button_frame,
                 text=f"Usar Poção ({self.player.health_potions})",
@@ -418,7 +391,6 @@ class RPGGame:
             messagebox.showerror("Error", "Escreva seu nome!")
             return
 
-        # Stop title screen music and play fight music
         if self.title_sound:
             self.title_sound.stop()
         if self.fight_sound:
@@ -435,7 +407,6 @@ class RPGGame:
 
     def start_stage(self):
         if self.stage > 5:
-            # Stop fight music and play victory sound
             if self.fight_sound:
                 self.fight_sound.stop()
             if self.victory_sound:
@@ -446,7 +417,6 @@ class RPGGame:
             self.window.quit()
             return
 
-        # Create enemies based on stage
         if self.stage < 3:
             self.current_enemy = Goblin()
         else:
@@ -458,11 +428,9 @@ class RPGGame:
         if not self.current_enemy or not self.current_enemy.is_alive():
             return
 
-        # Player attacks and generates resource
         damage = self.player.attack()
         self.current_enemy.take_damage(damage)
         
-        # Generate rage/mana on attack
         resource_message = ""
         if isinstance(self.player, Warrior):
             rage_gain = 10
@@ -473,7 +441,6 @@ class RPGGame:
             self.player.mana = min(100, self.player.mana + mana_gain)
             resource_message = f"\nMana regenerada: +{mana_gain}"
         
-        # Enemy attacks if alive
         if self.current_enemy.is_alive():
             enemy_damage = self.current_enemy.attack()
             self.player.take_damage(enemy_damage)
@@ -492,29 +459,27 @@ class RPGGame:
         if not self.current_enemy or not self.current_enemy.is_alive():
             return
 
-        # Player special attack
         message, damage = self.player.special_ability()
         self.current_enemy.take_damage(damage)
         
-        # Enemy attacks if alive
         if self.current_enemy.is_alive():
             enemy_damage = self.current_enemy.attack()
             self.player.take_damage(enemy_damage)
-            message += f"\nEnemy deals {enemy_damage} damage!"
+            message += f"\nInimigo causa {enemy_damage} de dano!"
         else:
             message += "\n" + self.handle_enemy_defeat()
 
         self.create_combat_gui()
-        messagebox.showinfo("Combat Round", message)
+        messagebox.showinfo("Combate", message)
 
         if not self.player.is_alive():
-            messagebox.showinfo("Game Over", "You have been defeated!")
+            messagebox.showinfo("Game Over", "Você foi derrotado!")
             self.window.quit()
 
     def handle_potion(self):
         message = self.player.use_health_potion()
         self.create_combat_gui()
-        messagebox.showinfo("Use Potion", message)
+        messagebox.showinfo("Usou poção!", message)
 
     def handle_enemy_defeat(self):
         loot_message = self.player.collect_loot(self.current_enemy.drop_loot())
@@ -526,10 +491,9 @@ class RPGGame:
         self.stage += 1
         self.start_stage()
         
-        return f"Enemy defeated!\n{loot_message}{level_message}"
+        return f"Inimigo Derrotado!\n{loot_message}{level_message}"
 
     def __del__(self):
-        # Clean up pygame mixer when the game closes
         try:
             pygame.mixer.quit()
         except:

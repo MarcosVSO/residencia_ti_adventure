@@ -5,7 +5,7 @@ class Weapon:
 
 class Sword(Weapon):
     def __init__(self):
-        super().__init__("Espada de Aço", 10)
+        super().__init__("Espada", 10)
 
 class Wand(Weapon):
     def __init__(self):
