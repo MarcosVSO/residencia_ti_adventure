@@ -17,11 +17,19 @@ class RPGGame:
         # Inicializa o sistema de áudio
         pygame.mixer.init()
         
+        # Define o volume padrão (0.0 a 1.0)
+        self.volume = 0.07
+        
         # Carrega os efeitos sonoros do jogo
         try:
             self.title_sound = pygame.mixer.Sound("assets/title_screen_sound.mp3")
             self.fight_sound = pygame.mixer.Sound("assets/fight_screen_sound.mp3")
             self.victory_sound = pygame.mixer.Sound("assets/victory_sound.mp3")
+            
+            # Aplica o volume aos sons
+            self.title_sound.set_volume(self.volume)
+            self.fight_sound.set_volume(self.volume)
+            self.victory_sound.set_volume(self.volume)
         except Exception as e:
             print(f"Erro ao carregar sons: {e}")
             self.title_sound = None
