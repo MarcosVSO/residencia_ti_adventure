@@ -17,7 +17,7 @@ class RPGGame:
         # Inicializa o sistema de áudio
         pygame.mixer.init()
         
-        # Define o volume padrão (0.0 a 1.0)
+        # Define o volume padrão
         self.volume = 0.07
         
         # Carrega os efeitos sonoros do jogo
